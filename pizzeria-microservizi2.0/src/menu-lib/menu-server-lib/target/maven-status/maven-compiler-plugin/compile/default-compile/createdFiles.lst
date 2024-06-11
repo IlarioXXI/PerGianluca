@@ -1,0 +1,6 @@
+com\nttdata\menu\server\models\ModelPiatto.class
+com\nttdata\menu\server\models\ResponseMenu.class
+com\nttdata\menu\server\models\ResponseBase.class
+com\nttdata\menu\server\models\ModelMenu.class
+com\nttdata\swagger\menu\server\api\AggiungiPiattoApi.class
+com\nttdata\swagger\menu\server\api\MenuInfoApi.class

@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  version: 0.0.2
+  title: Menu API
+servers:
+  - url: "http://localhost:8080/"
+    description: "Development server"
+tags:
+  - name: Menu Info
+    description: Menu Info
+paths:
+  /menu:
+    get:
+      operationId: getMenu
+      summary: Retrieve Menu List
+      tags:
+        - Menu Info
+      responses:
+        '200':
+          $ref: '#/components/responses/response-menu'
+        '400':
+          $ref: '#/components/responses/response-bad-request-400'
+        '401':
+          $ref: '#/components/responses/response-unauthorized-401'
+        '403':
+          $ref: '#/components/responses/response-forbidden-403'
+        '404':
+          $ref: '#/components/responses/response-not-found-404'
+        '500':
+          $ref: '#/components/responses/response-internal-server-error-500'
+  /menu/add:
+    post:
+      operationId: PostMenuAdd
+      summary: Aggiungi Piatto
+      tags:
+        - Aggiungi Piatto
+      requestBody:
+        description: Body Aggiungi Piatto Menu
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model-piatto'
+      responses:
+        '200':
+          $ref: '#/components/responses/response-ok-200'
+components:
+  responses:
+    response-ok-200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-bad-request-400:
+      description: Invalid Input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-unauthorized-401:
+      description: Authentication token required
+    response-forbidden-403:
+      description: Forbidden
+    response-not-found-404:
+      description: The requested resource could not be found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-internal-server-error-500:
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-menu:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-menu'
+  schemas:
+    response-base:
+      type: object
+      properties:
+        success:
+          type: boolean
+        resultCode:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: string
+        transactionId:
+          type: string
+        type:
+          type: string
+      required:
+        - success
+        - resultCode
+        - type
+    response-menu:
+      allOf:
+        - $ref: '#/components/schemas/response-base'
+        - type: object
+          properties:
+            returnValue:
+              $ref: '#/components/schemas/model-menu'
+    model-menu:
+      type: object
+      properties:
+        listaPiatti:
+          type: array
+          items:
+            $ref: '#/components/schemas/model-piatto'
+    model-piatto:
+      type: object
+      properties:
+        nome:
+          type: string
+        costo:
+          type: number
+          format: double

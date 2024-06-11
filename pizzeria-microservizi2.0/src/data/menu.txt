@@ -1,0 +1,8 @@
+Margherita,5.50
+Marinara,6.00
+Quattro Formaggi,7.50
+Capricciosa,8.00
+Diavola,7.00
+Vegetariana,6.50
+Prosciutto e Funghi,7.00
+Bufalina,9.00

@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  version: 0.0.2
+  title: Ordini API
+servers:
+  - url: "http://localhost:8082/"
+    description: "Development server"
+tags:
+  - name: Ordini Info
+    description: Ordini Info
+paths:
+  /ordini:
+    get:
+      operationId: getOrdini
+      summary: Retrieve Ordini List
+      tags:
+        - Ordini Info
+      responses:
+        '200':
+          $ref: '#/components/responses/response-ordini-list'
+        '400':
+          $ref: '#/components/responses/response-bad-request-400'
+        '401':
+          $ref: '#/components/responses/response-unauthorized-401'
+        '403':
+          $ref: '#/components/responses/response-forbidden-403'
+        '404':
+          $ref: '#/components/responses/response-not-found-404'
+        '500':
+          $ref: '#/components/responses/response-internal-server-error-500'
+    post:
+      operationId: aggiungiOrdine
+      summary: Aggiungi Ordine
+      tags: 
+        - Ordini Info
+      requestBody:
+        description: Body Creazione Ordine
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/model-ordine-base'
+      responses:
+        '200':
+          $ref: '#/components/responses/response-ok-200'
+        '400':
+          $ref: '#/components/responses/response-bad-request-400'
+        '401':
+          $ref: '#/components/responses/response-unauthorized-401'
+        '403':
+          $ref: '#/components/responses/response-forbidden-403'
+        '404':
+          $ref: '#/components/responses/response-not-found-404'
+        '500':
+          $ref: '#/components/responses/response-internal-server-error-500'
+  /delete/{id}:
+    delete:
+      operationId: eliminaOrdine
+      summary: Elimina Ordine
+      tags: 
+        - Ordini Info
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/response-ok-200'
+        '400':
+          $ref: '#/components/responses/response-bad-request-400'
+        '401':
+          $ref: '#/components/responses/response-unauthorized-401'
+        '403':
+          $ref: '#/components/responses/response-forbidden-403'
+        '404':
+          $ref: '#/components/responses/response-not-found-404'
+        '500':
+          $ref: '#/components/responses/response-internal-server-error-500'
+components:
+  parameters:    
+    id:
+      name: id
+      in: path
+      schema:
+        type: integer
+      required: true
+      description: id Ordine
+  responses:
+    response-ok-200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-bad-request-400:
+      description: Invalid Input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-unauthorized-401:
+      description: Authentication token required
+    response-forbidden-403:
+      description: Forbidden
+    response-not-found-404:
+      description: The requested resource could not be found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-internal-server-error-500:
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-base'
+    response-ordini-list:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response-ordini-list'
+  schemas:
+    response-base:
+      type: object
+      properties:
+        success:
+          type: boolean
+        resultCode:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: string
+        transactionId:
+          type: string
+        type:
+          type: string
+      required:
+        - success
+        - resultCode
+        - type
+    response-ordini-list:
+      allOf: 
+        - $ref: '#/components/schemas/response-base'
+        - type: object
+          properties:
+            returnValue:
+              $ref: '#/components/schemas/model-ordini-list'
+    model-ordini-list:
+      type: object
+      properties:
+        listaOrdini:
+          type: array
+          items:
+            $ref: '#/components/schemas/model-ordine'
+    model-ordine-base:
+      type: object
+      properties:
+        listaPiatti:
+          type: array
+          items:
+            $ref: '#/components/schemas/model-piatto'
+    model-ordine:
+      type: object
+      properties:
+        id: 
+          type: integer
+        descrizione:
+          type: string
+        totale:
+          type: number
+          format: double
+        stato:
+          type: string
+    model-piatto:
+      type: object
+      properties:
+        nome:
+          type: string
+        costo:
+          type: number
+          format: double
